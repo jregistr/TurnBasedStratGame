@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ public class Unit : MonoBehaviour
     [SerializeField] private Animator unitAnimator;
     
     private Vector3 _targetPosition;
-    
+
+    private void Awake()
+    {
+        _targetPosition = transform.position;
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -29,15 +35,9 @@ public class Unit : MonoBehaviour
         {
             unitAnimator.SetBool(Moving, false);
         }
-
-        if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
-        {
-            var position = MouseWorld.GetMouseWorldPosition();
-            Move(position);
-        }
     }
 
-    private void Move(Vector3 targetPosition)
+    public void Move(Vector3 targetPosition)
     {
         _targetPosition = targetPosition;
     }
