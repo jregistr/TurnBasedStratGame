@@ -598,6 +598,52 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &416466979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 416466981}
+  - component: {fileID: 416466980}
+  m_Layer: 0
+  m_Name: GridTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &416466980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416466979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b984beba48f5f496d90320d47d677b70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridDebugPrefab: {fileID: 2331021498421292664, guid: 3d58f5c9f1d644e6ea94fc8826095649,
+    type: 3}
+--- !u!4 &416466981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416466979}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.997163, y: 0.8267876, z: 1.8048838}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,7 +907,7 @@ PrefabInstance:
     - target: {fileID: 6519085961466821711, guid: e2859b53b76104fa3b15f16658ed9e4b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6519085961466821711, guid: e2859b53b76104fa3b15f16658ed9e4b,
         type: 3}
@@ -916,3 +962,4 @@ SceneRoots:
   - {fileID: 1074347120}
   - {fileID: 104082808}
   - {fileID: 77743500}
+  - {fileID: 416466981}

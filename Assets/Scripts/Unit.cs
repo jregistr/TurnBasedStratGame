@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,10 +14,17 @@ public class Unit : MonoBehaviour
     [SerializeField] private Animator unitAnimator;
     
     private Vector3 _targetPosition;
+    private GridPosition _gridPosition;
 
     private void Awake()
     {
         _targetPosition = transform.position;
+    }
+
+    public void Start()
+    {
+        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+        LevelGrid.Instance.SetUnitAtGridPosition(_gridPosition, this);
     }
 
     // Update is called once per frame
@@ -30,6 +38,15 @@ public class Unit : MonoBehaviour
             transform.position += moveDirection * (moveSpeed * Time.deltaTime);
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
             unitAnimator.SetBool(Moving, true);
+            
+            var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+            if (newGridPosition != _gridPosition)
+            {
+                var oldGridPosition = _gridPosition;
+                _gridPosition = newGridPosition;
+                LevelGrid.Instance.UnitMoved(oldGridPosition, _gridPosition, this);
+                // LevelGrid.Instance.SetUnitAtGridPosition(_gridPosition, this);
+            }
         }
         else
         {

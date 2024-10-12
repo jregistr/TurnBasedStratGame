@@ -13,7 +13,7 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Awake()
     {
-        if (SelectedUnit != null)
+        if (Instance != null)
         {
             Debug.LogError($"There is more than one unit action system: ${transform} - ${Instance}");
             Destroy(gameObject);
