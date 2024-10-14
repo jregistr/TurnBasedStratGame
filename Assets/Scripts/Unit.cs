@@ -1,6 +1,4 @@
-using System;
 using Grid;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -24,7 +22,7 @@ public class Unit : MonoBehaviour
     public void Start()
     {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-        LevelGrid.Instance.SetUnitAtGridPosition(_gridPosition, this);
+        LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
     }
 
     // Update is called once per frame
@@ -45,7 +43,6 @@ public class Unit : MonoBehaviour
                 var oldGridPosition = _gridPosition;
                 _gridPosition = newGridPosition;
                 LevelGrid.Instance.UnitMoved(oldGridPosition, _gridPosition, this);
-                // LevelGrid.Instance.SetUnitAtGridPosition(_gridPosition, this);
             }
         }
         else

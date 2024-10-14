@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Grid
 {
@@ -7,35 +9,42 @@ namespace Grid
         private readonly GridSystem _gridSystem;
         public readonly GridPosition GridPosition;
         
-        public Unit OccupyingUnit {get; private set;}
+        // public Unit OccupyingUnit {get; private set;}
+        private List<Unit> _units;
 
         public GridObject(GridSystem gridSystem, GridPosition gridPosition)
         {
             _gridSystem = gridSystem;
             GridPosition = gridPosition;
-            OccupyingUnit = null;
+            _units = new List<Unit>();
         }
 
-        public void SetUnit(Unit unit)
+        public void AddUnit(Unit unit)
         {
-            if (OccupyingUnit != null && unit == null)
+            if (_units.Contains(unit))
             {
-                OccupyingUnit = null;
-                return;
+                throw new ArgumentException("Unit is already in this grid position");
             }
             
-            if (OccupyingUnit != null)
-            {
-                throw new ArgumentException("Unit is already occupied");
-            }
-            
-            OccupyingUnit = unit;
+            _units.Add(unit);
+        }
+
+        public void RemoveUnit(Unit unit)
+        {
+            _units.Remove(unit);
+        }
+
+        public List<Unit> GetOccupyingUnits()
+        {
+            return _units.AsReadOnly().ToList();
         }
 
         public override string ToString()
         {
+            var unitNames = _units.Select(u => u.name);
+            var unitNamesString = string.Join(",\n", unitNames);
             return $"{GridPosition.X},{GridPosition.Z}\n" +
-                   $"{(OccupyingUnit != null ? OccupyingUnit.name : string.Empty)}";
+                   $"{unitNamesString}";
         }
     }
 }

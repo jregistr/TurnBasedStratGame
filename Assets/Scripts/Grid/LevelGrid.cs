@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Grid
@@ -18,36 +19,31 @@ namespace Grid
                 Destroy(gameObject);
             }
             Instance = this;
-        }
-        
-        private void Start()
-        {
             _gridSystem = new GridSystem(10, 10, 2);
             _gridSystem.CreateDebugObjects(gridDebugPrefab, transform);
         }
 
-        public void SetUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+        public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
             var gridObject = _gridSystem.GetGridObject(gridPosition);
-            gridObject.SetUnit(unit);
+            gridObject.AddUnit(unit);
         }
 
-        public Unit GetUnitAtGridPosition(GridPosition gridPosition)
+        public List<Unit> GetUnitsAtGridPosition(GridPosition gridPosition)
         {
-            return _gridSystem.GetGridObject(gridPosition).OccupyingUnit;
+            return _gridSystem.GetGridObject(gridPosition).GetOccupyingUnits();
         }
 
-        public void ClearUnitAtGridPosition(GridPosition gridPosition)
+        public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
-            // var gridObject = _gridSystem.GetGridObject(gridPosition);
-            // gridObject.SetUnit(null);
-            SetUnitAtGridPosition(gridPosition, null);
+            var gridObject = _gridSystem.GetGridObject(gridPosition);
+            gridObject.RemoveUnit(unit);
         }
 
         public void UnitMoved(GridPosition oldPosition, GridPosition newPosition, Unit unit)
         {
-            ClearUnitAtGridPosition(oldPosition);
-            SetUnitAtGridPosition(newPosition, unit);
+            RemoveUnitAtGridPosition(oldPosition, unit);
+            AddUnitAtGridPosition(newPosition, unit);
         }
         
         public GridPosition GetGridPosition(Vector3 worldPosition) => _gridSystem.GetGridPosition(worldPosition);
