@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Cinemachine;
 
@@ -31,6 +30,43 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
+            HandleCameraMovements();
+
+            HandleCameraRotation();
+
+            HandleCameraZoom();
+        }
+
+        private void HandleCameraZoom()
+        {
+            if (Input.mouseScrollDelta.y != 0)
+            {
+                _targetFollowOffset.y += Input.mouseScrollDelta.y;
+            }
+            
+            _targetFollowOffset.y = Mathf.Clamp(_targetFollowOffset.y, MinFollowYOffset, MaxFollowYOffset);
+            
+            _transposer.m_FollowOffset = Vector3.Lerp(_transposer.m_FollowOffset, _targetFollowOffset, Time.deltaTime * zoomSpeed);
+        }
+
+        private void HandleCameraRotation()
+        {
+            var rotationVector = Vector3.zero;
+            if (Input.GetKey(KeyCode.E))
+            {
+                rotationVector += Vector3.down;
+            }
+
+            if (Input.GetKey(KeyCode.Q))
+            {
+                rotationVector += Vector3.up;
+            }
+            
+            transform.eulerAngles += rotationVector * (rotationSpeed * Time.deltaTime);
+        }
+
+        private void HandleCameraMovements()
+        {
             Vector3 inputMoveDirection = new Vector3(0, 0, 0);
             if (Input.GetKey(KeyCode.W))
             {
@@ -54,28 +90,6 @@ namespace Player
             
             var moveVector = transform.forward * inputMoveDirection.z + transform.right * inputMoveDirection.x;
             transform.position += moveVector * (cameraSpeed * Time.deltaTime);
-            
-            var rotationVector = Vector3.zero;
-            if (Input.GetKey(KeyCode.E))
-            {
-                rotationVector += Vector3.down;
-            }
-
-            if (Input.GetKey(KeyCode.Q))
-            {
-                rotationVector += Vector3.up;
-            }
-            
-            transform.eulerAngles += rotationVector * (rotationSpeed * Time.deltaTime);
-
-            if (Input.mouseScrollDelta.y != 0)
-            {
-                _targetFollowOffset.y += Input.mouseScrollDelta.y;
-            }
-            
-            _targetFollowOffset.y = Mathf.Clamp(_targetFollowOffset.y, MinFollowYOffset, MaxFollowYOffset);
-            
-            _transposer.m_FollowOffset = Vector3.Lerp(_transposer.m_FollowOffset, _targetFollowOffset, Time.deltaTime * zoomSpeed);
         }
     }
 }
