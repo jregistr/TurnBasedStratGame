@@ -38,7 +38,7 @@ namespace Player
             if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
             {
                 var position = MouseWorld.GetMouseWorldPosition();
-                SelectedUnit?.Move(position);
+                SelectedUnit?.MoveAction.Move(position);
             }
         }
 

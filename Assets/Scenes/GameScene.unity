@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &416466980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridDebugPrefab: {fileID: 2331021498421292664, guid: 3d58f5c9f1d644e6ea94fc8826095649,
     type: 3}
+  unit: {fileID: 1975481632}
 --- !u!4 &416466981
 Transform:
   m_ObjectHideFlags: 0
@@ -1177,6 +1178,18 @@ Transform:
   - {fileID: 1507888570}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1975481632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4286510836578176745, guid: e2859b53b76104fa3b15f16658ed9e4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5440702282438953285}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 200ac6009631142aebb7ec5ec5a794be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5440702282438953285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1185,6 +1198,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 661620397267884268, guid: e2859b53b76104fa3b15f16658ed9e4b,
+        type: 3}
+      propertyPath: maxMoveDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3670158582641823429, guid: e2859b53b76104fa3b15f16658ed9e4b,
         type: 3}
       propertyPath: m_Name

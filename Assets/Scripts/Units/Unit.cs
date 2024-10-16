@@ -1,24 +1,19 @@
+using System;
 using Grid;
+using Units.Actions;
 using UnityEngine;
 
 namespace Units
 {
     public class Unit : MonoBehaviour
     {
-        private static readonly int Moving = Animator.StringToHash("Moving");
-    
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private float rotateSpeed;
-        [SerializeField] private float stoppingDistance;
-    
-        [SerializeField] private Animator unitAnimator;
-    
-        private Vector3 _targetPosition;
+        
         private GridPosition _gridPosition;
+        public MoveAction MoveAction { get; private set; }
 
         private void Awake()
         {
-            _targetPosition = transform.position;
+            MoveAction = GetComponent<MoveAction>();
         }
 
         public void Start()
@@ -30,32 +25,15 @@ namespace Units
         // Update is called once per frame
         private void Update()
         {
-            var distanceToTarget = Vector2.Distance(transform.position, _targetPosition);
-            if (distanceToTarget > stoppingDistance)
+            var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+            if (newGridPosition != _gridPosition)
             {
-                var moveDirection = (_targetPosition - transform.position).normalized;
-            
-                transform.position += moveDirection * (moveSpeed * Time.deltaTime);
-                transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
-                unitAnimator.SetBool(Moving, true);
-            
-                var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-                if (newGridPosition != _gridPosition)
-                {
-                    var oldGridPosition = _gridPosition;
-                    _gridPosition = newGridPosition;
-                    LevelGrid.Instance.UnitMoved(oldGridPosition, _gridPosition, this);
-                }
-            }
-            else
-            {
-                unitAnimator.SetBool(Moving, false);
+                var oldGridPosition = _gridPosition;
+                _gridPosition = newGridPosition;
+                LevelGrid.Instance.UnitMoved(oldGridPosition, _gridPosition, this);
             }
         }
-
-        public void Move(Vector3 targetPosition)
-        {
-            _targetPosition = targetPosition;
-        }
+        
+        public GridPosition GetGridPosition => _gridPosition;
     }
 }
