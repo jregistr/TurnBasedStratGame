@@ -40,6 +40,11 @@ namespace Grid
             return _units.AsReadOnly().ToList();
         }
 
+        public bool IsOccupiedByAnyUnit()
+        {
+            return _units.Any();
+        }
+
         public override string ToString()
         {
             var unitNames = _units.Select(u => u.name);

@@ -179,10 +179,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc68008289774303acef76f6dd27d3d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxMoveDistance: 2
   unitAnimator: {fileID: 6273667125453273571}
   moveSpeed: 5
   rotateSpeed: 15
-  stoppingDistance: 0.3
+  stoppingDistance: 0.1
 --- !u!1001 &6216312049130624955
 PrefabInstance:
   m_ObjectHideFlags: 0

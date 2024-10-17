@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using Unity.VisualScripting;
 using UnityEngine;
 using Unit = Units.Unit;
@@ -24,9 +25,7 @@ namespace Player
 
             Instance = this;
         }
-
-        // public delegate void UnitAction(Unit unit);
-
+        
         // Update is called once per frame
         private void Update()
         {
@@ -38,7 +37,13 @@ namespace Player
             if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
             {
                 var position = MouseWorld.GetMouseWorldPosition();
-                SelectedUnit?.MoveAction.Move(position);
+                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(position);
+                if (SelectedUnit?.MoveAction.IsValidActionGridPosition(mouseGridPosition) ?? false)
+                {
+                    Debug.Log($"Valid action grid position: {mouseGridPosition}");
+                    SelectedUnit.MoveAction.MoveTo(mouseGridPosition);
+                }
+                // SelectedUnit?.MoveAction.Move(position);
             }
         }
 

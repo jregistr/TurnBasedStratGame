@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public class MoveAction: MonoBehaviour
+    public class MoveAction : MonoBehaviour
     {
         private static readonly int Moving = Animator.StringToHash("Moving");
 
         [SerializeField] private int maxMoveDistance = 3;
-        
+
         [SerializeField] private Animator unitAnimator;
         [SerializeField] private float moveSpeed;
         [SerializeField] private float rotateSpeed;
         [SerializeField] private float stoppingDistance;
-        
+
         private Unit _unit;
         private Vector3 _targetPosition;
-        
+
         private void Awake()
         {
             _targetPosition = transform.position;
@@ -26,7 +26,7 @@ namespace Units.Actions
 
         private void Update()
         {
-            var distanceToTarget = Vector2.Distance(transform.position, _targetPosition);
+            var distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
             if (distanceToTarget > stoppingDistance)
             {
                 var moveDirection = (_targetPosition - transform.position).normalized;
@@ -39,12 +39,18 @@ namespace Units.Actions
                 unitAnimator.SetBool(Moving, false);
             }
         }
-        
-        public void Move(Vector3 targetPosition)
+
+        public void MoveTo(GridPosition targetPosition)
         {
-            _targetPosition = targetPosition;
+            _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         }
 
+        public bool IsValidActionGridPosition(GridPosition targetPosition)
+        {
+            List<GridPosition> validPosition = GetValidActionGridPositionList();
+            return validPosition.Contains(targetPosition);
+        }
+        
         public List<GridPosition> GetValidActionGridPositionList()
         {
             var list = new List<GridPosition>();
@@ -55,10 +61,25 @@ namespace Units.Actions
                 {
                     GridPosition offsetPosition = new GridPosition(x, z);
                     GridPosition testGridPosition = currentGridPosition + offsetPosition;
-                    Debug.Log($"Test Grid Position: {testGridPosition}");
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    if (currentGridPosition == testGridPosition)
+                    {
+                        continue;
+                    }
+
+                    if (LevelGrid.Instance.IsGridPositionOccupied(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    list.Add(testGridPosition);
                 }
             }
-            
+
             return list;
         }
     }
