@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 
 namespace Grid
@@ -11,6 +12,10 @@ namespace Grid
 
         private void Awake()
         {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+            }
             Instance = this;
         }
         
@@ -41,6 +46,11 @@ namespace Grid
             }
         }
 
+        private void Update()
+        {
+            UpdateGridVisuals();
+        }
+
         public void HideAllGridVisuals()
         {
             foreach (var visual in _gridVisuals)
@@ -55,6 +65,16 @@ namespace Grid
             {
                 _gridVisuals[position.X, position.Z].Show();
             }
+        }
+
+        public void UpdateGridVisuals()
+        {
+            HideAllGridVisuals();
+            var selectedUnit = UnitActionSystem.Instance.SelectedUnit;
+            if (!selectedUnit) return;
+            if (selectedUnit.MoveAction.IsMoving) return;
+            var validMovePositions = selectedUnit.MoveAction.GetValidActionGridPositionList();
+            ShowPositions(validMovePositions);
         }
     }
 }

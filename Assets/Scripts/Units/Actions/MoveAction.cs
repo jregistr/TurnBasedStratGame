@@ -15,6 +15,8 @@ namespace Units.Actions
         [SerializeField] private float rotateSpeed;
         [SerializeField] private float stoppingDistance;
 
+        public bool IsMoving {get; private set;}
+        
         private Unit _unit;
         private Vector3 _targetPosition;
 
@@ -32,10 +34,12 @@ namespace Units.Actions
                 var moveDirection = (_targetPosition - transform.position).normalized;
                 transform.position += moveDirection * (moveSpeed * Time.deltaTime);
                 transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
+                IsMoving = true;
                 unitAnimator.SetBool(Moving, true);
             }
             else
             {
+                IsMoving = false;
                 unitAnimator.SetBool(Moving, false);
             }
         }

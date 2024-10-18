@@ -23,9 +23,10 @@ namespace Grid
             if (Input.GetKeyDown(KeyCode.T))
             {
                 var validPositions = unit.MoveAction.GetValidActionGridPositionList();
+                Debug.Log(validPositions);
                 // GridSystemVisual.
-                GridVisualSystem.Instance.HideAllGridVisuals();
-                GridVisualSystem.Instance.ShowPositions(validPositions);
+                // GridVisualSystem.Instance.HideAllGridVisuals();
+                // GridVisualSystem.Instance.ShowPositions(validPositions);
             }
             
         }
