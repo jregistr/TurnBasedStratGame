@@ -1,5 +1,6 @@
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -10,21 +11,21 @@ namespace Player
         
         [SerializeField] private float cameraSpeed = 10f;
         [SerializeField] private float rotationSpeed = 100f;
-        [SerializeField] private CinemachineVirtualCamera virtualCamera;
+        [SerializeField] private CinemachineCamera cinemachineCamera;
         [SerializeField] private float zoomSpeed = 10f;
         
-        private CinemachineTransposer _transposer;
+        private CinemachineFollow _cinemachineFollow;
 
         private Vector3 _targetFollowOffset;
 
         private void Awake()
         {
-            _transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _cinemachineFollow = cinemachineCamera.GetComponent<CinemachineFollow>();
         }
 
         private void Start()
         {
-            _targetFollowOffset = _transposer.m_FollowOffset;
+            _targetFollowOffset = _cinemachineFollow.FollowOffset;
         }
 
         // Update is called once per frame
@@ -46,7 +47,7 @@ namespace Player
             
             _targetFollowOffset.y = Mathf.Clamp(_targetFollowOffset.y, MinFollowYOffset, MaxFollowYOffset);
             
-            _transposer.m_FollowOffset = Vector3.Lerp(_transposer.m_FollowOffset, _targetFollowOffset, Time.deltaTime * zoomSpeed);
+            _cinemachineFollow.FollowOffset = Vector3.Lerp(_cinemachineFollow.FollowOffset, _targetFollowOffset, Time.deltaTime * zoomSpeed);
         }
 
         private void HandleCameraRotation()
