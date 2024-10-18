@@ -20,11 +20,12 @@ namespace Grid
         // Update is called once per frame
         void Update()
         {
-            // var mouseWorld = MouseWorld.GetMouseWorldPosition();
-            // Debug.Log(_gridSystem.GetGridPosition(mouseWorld));
             if (Input.GetKeyDown(KeyCode.T))
             {
-                unit.MoveAction.GetValidActionGridPositionList();
+                var validPositions = unit.MoveAction.GetValidActionGridPositionList();
+                // GridSystemVisual.
+                GridVisualSystem.Instance.HideAllGridVisuals();
+                GridVisualSystem.Instance.ShowPositions(validPositions);
             }
             
         }

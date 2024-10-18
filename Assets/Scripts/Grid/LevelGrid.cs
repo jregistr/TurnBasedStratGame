@@ -58,5 +58,10 @@ namespace Grid
             var gridObject = _gridSystem.GetGridObject(gridPosition);
             return gridObject.IsOccupiedByAnyUnit();
         }
+
+        public int GetGridWidth() =>_gridSystem.GetWidth();
+
+        public int GetGridHeight() => _gridSystem.GetHeight();
+        
     }
 }
