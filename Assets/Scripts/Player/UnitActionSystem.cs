@@ -15,6 +15,8 @@ namespace Player
         [SerializeField] private LayerMask mouseUnitLayerMask;
         public Unit SelectedUnit { get; private set; }
 
+        private bool _selectedUnitRunningAction;
+        
         private void Awake()
         {
             if (Instance != null)
@@ -34,21 +36,28 @@ namespace Player
                 return;
             }
 
+            if (_selectedUnitRunningAction)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
             {
+                
                 var position = MouseWorld.GetMouseWorldPosition();
                 GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(position);
                 if (SelectedUnit?.MoveAction.IsValidActionGridPosition(mouseGridPosition) ?? false)
                 {
+                    TakingAction();
                     Debug.Log($"Valid action grid position: {mouseGridPosition}");
-                    SelectedUnit.MoveAction.MoveTo(mouseGridPosition);
+                    SelectedUnit.MoveAction.MoveTo(mouseGridPosition, ClearTakingAction);
                 }
-                // SelectedUnit?.MoveAction.Move(position);
             }
 
             if (Input.GetMouseButtonDown(MouseButton.Right.GetHashCode()))
             {
-                SelectedUnit?.SpinAction.Spin();
+                TakingAction();
+                SelectedUnit?.SpinAction.Spin(ClearTakingAction);
             }
         }
 
@@ -68,6 +77,16 @@ namespace Player
             }
 
             return false;
+        }
+
+        private void TakingAction()
+        {
+            _selectedUnitRunningAction = true;
+        }
+
+        private void ClearTakingAction()
+        {
+            _selectedUnitRunningAction = false;
         }
     }
 }

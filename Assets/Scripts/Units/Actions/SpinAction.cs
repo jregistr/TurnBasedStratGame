@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Units.Actions
@@ -6,10 +7,11 @@ namespace Units.Actions
     {
         [SerializeField] private float spinAmount;
         private float _totalSpinAmount;
+        
 
         private void Update()
         {
-            if (!_isActive) return;
+            if (!IsActive) return;
 
             var spinAddAmount = 360 * Time.deltaTime;
             _totalSpinAmount += spinAddAmount;
@@ -17,14 +19,15 @@ namespace Units.Actions
 
             if (_totalSpinAmount >= 360)
             {
-                _isActive = false;
+                IsActive = false;
+                OnActionComplete();
             }
-            
         }
 
-        public void Spin()
+        public void Spin(Action onComplete)
         {
-            _isActive = true;
+            IsActive = true;
+            OnActionComplete = onComplete;
             _totalSpinAmount = 0;
         }
     }

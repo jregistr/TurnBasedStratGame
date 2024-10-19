@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace Units.Actions
 
         private void Update()
         {
-            if (!_isActive) return;
+            if (!IsActive) return;
             
             var distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
             if (distanceToTarget > stoppingDistance)
@@ -42,13 +43,15 @@ namespace Units.Actions
             {
                 IsMoving = false;
                 unitAnimator.SetBool(Moving, false);
-                _isActive = false;
+                IsActive = false;
+                OnActionComplete();
             }
         }
 
-        public void MoveTo(GridPosition targetPosition)
+        public void MoveTo(GridPosition targetPosition, Action onComplete)
         {
-            _isActive = true;
+            IsActive = true;
+            OnActionComplete = onComplete;
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         }
 
@@ -61,7 +64,7 @@ namespace Units.Actions
         public List<GridPosition> GetValidActionGridPositionList()
         {
             var list = new List<GridPosition>();
-            GridPosition currentGridPosition = _unit.GetGridPosition;
+            GridPosition currentGridPosition = Unit.GetGridPosition;
             for (int x = -maxMoveDistance; x <= maxMoveDistance; x++)
             {
                 for (int z = -maxMoveDistance; z <= maxMoveDistance; z++)
