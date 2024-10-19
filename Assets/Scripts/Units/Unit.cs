@@ -10,10 +10,12 @@ namespace Units
         
         private GridPosition _gridPosition;
         public MoveAction MoveAction { get; private set; }
+        public SpinAction SpinAction { get; private set; }
 
         private void Awake()
         {
             MoveAction = GetComponent<MoveAction>();
+            SpinAction = GetComponent<SpinAction>();
         }
 
         public void Start()

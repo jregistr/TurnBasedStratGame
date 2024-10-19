@@ -45,6 +45,11 @@ namespace Player
                 }
                 // SelectedUnit?.MoveAction.Move(position);
             }
+
+            if (Input.GetMouseButtonDown(MouseButton.Right.GetHashCode()))
+            {
+                SelectedUnit?.SpinAction.Spin();
+            }
         }
 
         private bool TryHandleUnitSelection()

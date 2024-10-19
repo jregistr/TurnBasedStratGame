@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public class MoveAction : MonoBehaviour
+    public class MoveAction : BaseAction
     {
         private static readonly int Moving = Animator.StringToHash("Moving");
 
@@ -17,17 +17,18 @@ namespace Units.Actions
 
         public bool IsMoving {get; private set;}
         
-        private Unit _unit;
         private Vector3 _targetPosition;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _targetPosition = transform.position;
-            _unit = GetComponent<Unit>();
         }
 
         private void Update()
         {
+            if (!_isActive) return;
+            
             var distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
             if (distanceToTarget > stoppingDistance)
             {
@@ -41,11 +42,13 @@ namespace Units.Actions
             {
                 IsMoving = false;
                 unitAnimator.SetBool(Moving, false);
+                _isActive = false;
             }
         }
 
         public void MoveTo(GridPosition targetPosition)
         {
+            _isActive = true;
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         }
 
