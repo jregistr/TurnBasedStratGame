@@ -26,6 +26,8 @@ namespace Units.Actions
             _targetPosition = transform.position;
         }
 
+        public override string GetActionName() => "Move";
+
         private void Update()
         {
             if (!IsActive) return;

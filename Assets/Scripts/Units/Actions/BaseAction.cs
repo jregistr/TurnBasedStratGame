@@ -13,5 +13,7 @@ namespace Units.Actions
         {
             Unit = GetComponent<Unit>();
         }
+
+        public abstract string GetActionName();
     }
 }

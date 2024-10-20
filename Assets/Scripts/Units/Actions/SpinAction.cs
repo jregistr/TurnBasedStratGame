@@ -30,5 +30,7 @@ namespace Units.Actions
             OnActionComplete = onComplete;
             _totalSpinAmount = 0;
         }
+
+        public override string GetActionName() => "Spin";
     }
 }
