@@ -23,7 +23,8 @@ namespace Player
             }
             
             var selectedUnit = UnitActionSystem.Instance.SelectedUnit;
-            if (selectedUnit == null) return;
+            if (!selectedUnit) return;
+            
             foreach (var baseAction in selectedUnit.BaseActions)
             {
                 var button = Instantiate(actionButtonPrefab, actionButtonsParent);

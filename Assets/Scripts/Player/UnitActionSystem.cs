@@ -1,5 +1,6 @@
 using System;
 using Grid;
+using Units.Actions;
 using Unity.VisualScripting;
 using UnityEngine;
 using Unit = Units.Unit;
@@ -14,6 +15,7 @@ namespace Player
 
         [SerializeField] private LayerMask mouseUnitLayerMask;
         public Unit SelectedUnit { get; private set; }
+        public BaseAction SelectedAction { get; private set; }
 
         private bool _selectedUnitRunningAction;
         
@@ -41,23 +43,29 @@ namespace Player
                 return;
             }
 
-            if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
-            {
-                
-                var position = MouseWorld.GetMouseWorldPosition();
-                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(position);
-                if (SelectedUnit?.MoveAction.IsValidActionGridPosition(mouseGridPosition) ?? false)
-                {
-                    TakingAction();
-                    Debug.Log($"Valid action grid position: {mouseGridPosition}");
-                    SelectedUnit.MoveAction.MoveTo(mouseGridPosition, ClearTakingAction);
-                }
-            }
+            HandleSelectedAction();
+        }
 
-            if (Input.GetMouseButtonDown(MouseButton.Right.GetHashCode()))
+        private void HandleSelectedAction()
+        {
+            if (Input.GetMouseButtonDown(MouseButton.Left.GetHashCode()))
             {
-                TakingAction();
-                SelectedUnit?.SpinAction.Spin(ClearTakingAction);
+                switch (SelectedAction)
+                {
+                    case MoveAction mouseMoveAction:
+                        var position = MouseWorld.GetMouseWorldPosition();
+                        var mouseGridPosition = LevelGrid.Instance.GetGridPosition(position);
+                        if (SelectedUnit?.MoveAction.IsValidActionGridPosition(mouseGridPosition) ?? false)
+                        {
+                            TakingAction();
+                            mouseMoveAction.MoveTo(mouseGridPosition, ClearTakingAction);
+                        }
+                        break;
+                    case SpinAction spinAction:
+                        TakingAction();
+                        spinAction.Spin(ClearTakingAction);
+                        break;
+                }
             }
         }
 
@@ -71,6 +79,7 @@ namespace Player
                 if (raycastHit && hitInfo.collider.TryGetComponent(out Unit unit))
                 {
                     SelectedUnit = unit;
+                    SetSelectedAction(SelectedUnit.MoveAction);
                     OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
                     return true;
                 }
@@ -87,6 +96,11 @@ namespace Player
         private void ClearTakingAction()
         {
             _selectedUnitRunningAction = false;
+        }
+
+        public void SetSelectedAction(BaseAction action)
+        {
+            SelectedAction = action;
         }
     }
 }

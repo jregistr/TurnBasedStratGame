@@ -13,6 +13,10 @@ namespace Player
         public void SetBaseAction(BaseAction action)
         {
             actionText.text = action.GetActionName().ToUpper();
+            button.onClick.AddListener(() =>
+            {
+                UnitActionSystem.Instance.SetSelectedAction(action);
+            });
         }
     }
 }
