@@ -3,15 +3,18 @@ using Grid;
 using Units.Actions;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Unit = Units.Unit;
 
 namespace Player
 {
     public class UnitActionSystem : MonoBehaviour
     {
+        
         public static UnitActionSystem Instance { get; private set; }
 
         public event EventHandler OnSelectedUnitChanged;
+        public event EventHandler OnSelectedActionChanged; 
 
         [SerializeField] private LayerMask mouseUnitLayerMask;
         public Unit SelectedUnit { get; private set; }
@@ -33,12 +36,18 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
-            if (TryHandleUnitSelection())
+            
+            if (EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
-
+            
             if (_selectedUnitRunningAction)
+            {
+                return;
+            }
+            
+            if (TryHandleUnitSelection())
             {
                 return;
             }
@@ -48,7 +57,7 @@ namespace Player
 
         private void HandleSelectedAction()
         {
-            if (Input.GetMouseButtonDown(MouseButton.Left.GetHashCode()))
+            if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
             {
                 switch (SelectedAction)
                 {
@@ -78,6 +87,10 @@ namespace Player
 
                 if (raycastHit && hitInfo.collider.TryGetComponent(out Unit unit))
                 {
+                    if (unit == SelectedUnit)
+                    {
+                        return false;
+                    }
                     SelectedUnit = unit;
                     SetSelectedAction(SelectedUnit.MoveAction);
                     OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
@@ -101,6 +114,7 @@ namespace Player
         public void SetSelectedAction(BaseAction action)
         {
             SelectedAction = action;
+            OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

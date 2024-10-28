@@ -2,7 +2,7 @@ using System;
 
 namespace Grid
 {
-    public struct GridPosition: IEquatable<GridPosition>
+    public readonly struct GridPosition: IEquatable<GridPosition>
     {
         public readonly int X;
         public readonly int Z;
