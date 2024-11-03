@@ -14,7 +14,8 @@ namespace Player
         public static UnitActionSystem Instance { get; private set; }
 
         public event EventHandler OnSelectedUnitChanged;
-        public event EventHandler OnSelectedActionChanged; 
+        public event EventHandler OnSelectedActionChanged;
+        public event EventHandler<bool> OnUnitExecutingActionChanged; 
 
         [SerializeField] private LayerMask mouseUnitLayerMask;
         public Unit SelectedUnit { get; private set; }
@@ -104,11 +105,13 @@ namespace Player
         private void TakingAction()
         {
             _selectedUnitRunningAction = true;
+            OnUnitExecutingActionChanged?.Invoke(this, true);
         }
 
         private void ClearTakingAction()
         {
             _selectedUnitRunningAction = false;
+            OnUnitExecutingActionChanged?.Invoke(this, false);
         }
 
         public void SetSelectedAction(BaseAction action)
