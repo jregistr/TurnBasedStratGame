@@ -13,6 +13,8 @@ namespace Units
         public SpinAction SpinAction { get; private set; }
         public BaseAction[] BaseActions { get; private set; }
 
+        private int _actionPoints = 2;
+
         private void Awake()
         {
             MoveAction = GetComponent<MoveAction>();
@@ -39,5 +41,28 @@ namespace Units
         }
         
         public GridPosition GetGridPosition => _gridPosition;
+
+        public bool TrySpendActionPoints(BaseAction action)
+        {
+            if (!CanSpendActionPointsToTakeAction(action)) return false;
+            
+            SpendActionPoints(action.GetActionCost());
+            return true;
+        }
+
+        public bool CanSpendActionPointsToTakeAction(BaseAction action)
+        {
+            return _actionPoints >= action.GetActionCost();
+        }
+
+        private void SpendActionPoints(int points)
+        {
+            _actionPoints -= points;
+        }
+
+        public int GetActionPointsLeft()
+        {
+            return _actionPoints;
+        }
     }
 }

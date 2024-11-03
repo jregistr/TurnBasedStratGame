@@ -94,5 +94,10 @@ namespace Units.Actions
 
             return list;
         }
+
+        public override int GetActionCost()
+        {
+            return 2;
+        }
     }
 }

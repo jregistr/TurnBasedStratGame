@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Units.Actions;
+using TMPro;
 using UnityEngine;
 
 namespace Player
@@ -9,6 +9,7 @@ namespace Player
     {
         [SerializeField] private Transform actionButtonPrefab;
         [SerializeField] private Transform actionButtonsParent;
+        [SerializeField] private TextMeshProUGUI actionButtonText;
 
         private List<ActionButtonUI> _actionButtons;
         
@@ -16,13 +17,15 @@ namespace Player
         private void Start()
         {
             CreateUnitActionButtons();
+            UpdateActionPointsVisual();
             UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
             UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
-            _actionButtons = new List<ActionButtonUI>();
+            UnitActionSystem.Instance.UnitStartedAction += UnitActionSystem_OnSelectedUnitStartedAction;
         }
 
         private void CreateUnitActionButtons()
         {
+            _actionButtons = new List<ActionButtonUI>();
             foreach (Transform actionButton in actionButtonsParent)
             {
                 Destroy(actionButton.gameObject);
@@ -42,9 +45,31 @@ namespace Player
             UpdateSelectedActionVisual();
         }
 
+        private void UpdateActionPointsVisual()
+        {
+            var selectedUnit = UnitActionSystem.Instance.SelectedUnit;
+            if (!selectedUnit)
+            {
+                actionButtonText.gameObject.SetActive(false);
+                return;
+            }
+            
+            actionButtonText.gameObject.SetActive(true);
+
+            var points = selectedUnit.GetActionPointsLeft();
+            actionButtonText.text = $"Action Points: {points}";
+        }
+
+        private void UnitActionSystem_OnSelectedUnitStartedAction(object sender, EventArgs eventArgs)
+        {
+            Debug.Log("Unit started action");
+            UpdateActionPointsVisual();
+        }
+
         private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs eventArgs)
         {
             CreateUnitActionButtons();
+            UpdateActionPointsVisual();
         }
 
         private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs eventArgs)

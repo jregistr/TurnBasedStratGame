@@ -15,5 +15,10 @@ namespace Units.Actions
         }
 
         public abstract string GetActionName();
+
+        public virtual int GetActionCost()
+        {
+            return 1;
+        }
     }
 }

@@ -15,7 +15,8 @@ namespace Player
 
         public event EventHandler OnSelectedUnitChanged;
         public event EventHandler OnSelectedActionChanged;
-        public event EventHandler<bool> OnUnitExecutingActionChanged; 
+        public event EventHandler<bool> OnUnitExecutingActionChanged;
+        public event EventHandler UnitStartedAction;
 
         [SerializeField] private LayerMask mouseUnitLayerMask;
         public Unit SelectedUnit { get; private set; }
@@ -60,6 +61,8 @@ namespace Player
         {
             if (Input.GetMouseButtonUp(MouseButton.Left.GetHashCode()))
             {
+                if (!SelectedUnit?.TrySpendActionPoints(SelectedAction) ?? false) return;
+                UnitStartedAction?.Invoke(this, EventArgs.Empty);
                 switch (SelectedAction)
                 {
                     case MoveAction mouseMoveAction:
